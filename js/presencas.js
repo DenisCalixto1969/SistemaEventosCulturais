@@ -1,0 +1,430 @@
+"use strict";
+
+
+function carregarModuloPresencas() {
+    return `
+        <section class="modulo">
+            <div class="cabecalho-modulo">
+                <div>
+                    <h2>Presenças</h2>
+                    <p>Registro de presença nos eventos.</p>
+                </div>
+            </div>
+
+            <section class="painel">
+                <div id="evento-aberto">
+                    <p>
+                        Selecione um evento na aba Eventos
+                        e clique em Abrir.
+                    </p>
+                </div>
+            </section>
+        </section>
+    `;
+}
+
+
+async function inicializarModuloPresencas() {
+    // Por enquanto não há inicialização adicional.
+}
+
+
+function membroPodeParticiparEvento(membro, evento) {
+    if (!membro || !evento) {
+        return false;
+    }
+
+    const grauMembro = Number(membro.grau);
+    const grauEvento = Number(evento.grau);
+
+    if (evento.tipo === "Reunião Administrativa") {
+        return grauMembro === 33;
+    }
+
+    return grauMembro >= grauEvento;
+}
+
+
+async function listarPresencas() {
+    const banco = await abrirBanco();
+
+    return new Promise((resolve, reject) => {
+        const transacao = banco.transaction(
+            CONFIG_BANCO.tabelas.presencas,
+            "readonly"
+        );
+
+        const tabela = transacao.objectStore(
+            CONFIG_BANCO.tabelas.presencas
+        );
+
+        const requisicao = tabela.getAll();
+
+        requisicao.onsuccess = function () {
+            resolve(requisicao.result);
+        };
+
+        requisicao.onerror = function () {
+            reject(requisicao.error);
+        };
+    });
+}
+
+
+async function adicionarPresenca(presenca) {
+    const banco = await abrirBanco();
+
+    return new Promise((resolve, reject) => {
+        const transacao = banco.transaction(
+            CONFIG_BANCO.tabelas.presencas,
+            "readwrite"
+        );
+
+        const tabela = transacao.objectStore(
+            CONFIG_BANCO.tabelas.presencas
+        );
+
+        const requisicao = tabela.add(presenca);
+
+        requisicao.onsuccess = function () {
+            resolve();
+        };
+
+        requisicao.onerror = function () {
+            reject(requisicao.error);
+        };
+    });
+}
+
+
+async function atualizarPresenca(presenca) {
+    const banco = await abrirBanco();
+
+    return new Promise((resolve, reject) => {
+        const transacao = banco.transaction(
+            CONFIG_BANCO.tabelas.presencas,
+            "readwrite"
+        );
+
+        const tabela = transacao.objectStore(
+            CONFIG_BANCO.tabelas.presencas
+        );
+
+        const requisicao = tabela.put(presenca);
+
+        requisicao.onsuccess = function () {
+            resolve();
+        };
+
+        requisicao.onerror = function () {
+            reject(requisicao.error);
+        };
+    });
+}
+
+
+async function gerarPresencasEvento(evento) {
+    const membros = await listarMembros();
+
+    const presencasExistentes =
+        await listarPresencas();
+
+    const presencasDoEvento =
+        presencasExistentes.filter(
+            presenca =>
+                presenca.eventoId === evento.id
+        );
+
+    const membrosAptos = membros.filter(
+        membro =>
+            membroPodeParticiparEvento(
+                membro,
+                evento
+            )
+    );
+
+    let quantidadeCriada = 0;
+
+    for (const membro of membrosAptos) {
+        const jaExiste =
+            presencasDoEvento.some(
+                presenca =>
+                    presenca.membroId === membro.id
+            );
+
+        if (jaExiste) {
+            continue;
+        }
+
+        const novaPresenca = {
+            id: crypto.randomUUID(),
+            eventoId: evento.id,
+            membroId: membro.id,
+            presente: false
+        };
+
+        await adicionarPresenca(novaPresenca);
+
+        quantidadeCriada++;
+    }
+
+    return quantidadeCriada;
+}
+
+
+async function abrirEventoParaPresencas(idEvento) {
+    const evento =
+        await buscarEventoPorId(idEvento);
+
+    if (!evento) {
+        return;
+    }
+
+    await gerarPresencasEvento(evento);
+
+    await carregarModulo("presencas");
+
+    await carregarEventoAberto(evento.id);
+}
+
+
+async function carregarEventoAberto(idEvento) {
+    const evento =
+        await buscarEventoPorId(idEvento);
+
+    if (!evento) {
+        return;
+    }
+
+    const todasPresencas =
+        await listarPresencas();
+
+    const presencasEvento =
+        todasPresencas.filter(
+            presenca =>
+                presenca.eventoId === evento.id
+        );
+
+    const membros =
+        await listarMembros();
+
+    const registros = [];
+
+    for (const presenca of presencasEvento) {
+        const membro = membros.find(
+            item =>
+                item.id === presenca.membroId
+        );
+
+        if (!membro) {
+            continue;
+        }
+
+        registros.push({
+            presenca,
+            membro
+        });
+    }
+
+    registros.sort((a, b) =>
+        a.membro.nome.localeCompare(
+            b.membro.nome,
+            "pt-BR",
+            { sensitivity: "base" }
+        )
+    );
+
+    renderizarEventoAberto(
+        evento,
+        registros
+    );
+}
+
+
+function renderizarEventoAberto(evento, registros) {
+    const container =
+        document.querySelector("#evento-aberto");
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="cabecalho-evento-aberto">
+            <h3>
+                ${obterNomeExibicaoEvento(evento)}
+            </h3>
+
+            <p>
+                Data:
+                ${formatarDataEvento(evento.data)}
+            </p>
+
+            <p>
+                Participação:
+                ${obterRegraExibicaoEvento(evento)}
+            </p>
+        </div>
+
+        <hr>
+
+        <h3>Participantes aptos</h3>
+
+        ${
+            registros.length === 0
+                ? `
+                    <p>
+                        Nenhum membro apto para este evento.
+                    </p>
+                `
+                : `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Presente</th>
+                                <th>Nome</th>
+                                <th>Grau</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            ${registros.map(item => `
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            class="controle-presenca"
+                                            data-id="${item.presenca.id}"
+                                            ${
+                                                item.presenca.presente
+                                                    ? "checked"
+                                                    : ""
+                                            }
+                                        >
+                                    </td>
+
+                                    <td>
+                                        ${item.membro.nome}
+                                    </td>
+
+                                    <td>
+                                        Grau ${item.membro.grau}
+                                    </td>
+
+                                    <td
+                                        id="status-${item.presenca.id}"
+                                    >
+                                        ${
+                                            item.presenca.presente
+                                                ? "Presente"
+                                                : "Ausente"
+                                        }
+                                    </td>
+                                </tr>
+                            `).join("")}
+                        </tbody>
+                    </table>
+                `
+        }
+
+        <div id="resumo-presencas"></div>
+    `;
+
+    container
+        .querySelectorAll(".controle-presenca")
+        .forEach(controle => {
+            controle.addEventListener(
+                "change",
+                alterarPresencaEvento
+            );
+        });
+
+    atualizarResumoEvento(registros);
+}
+
+
+async function alterarPresencaEvento(evento) {
+    const controle =
+        evento.currentTarget;
+
+    const id = controle.dataset.id;
+
+    const todasPresencas =
+        await listarPresencas();
+
+    const presenca =
+        todasPresencas.find(
+            item =>
+                item.id === id
+        );
+
+    if (!presenca) {
+        return;
+    }
+
+    presenca.presente =
+        controle.checked;
+
+    await atualizarPresenca(presenca);
+
+    const status =
+        document.querySelector(
+            `#status-${presenca.id}`
+        );
+
+    if (status) {
+        status.textContent =
+            presenca.presente
+                ? "Presente"
+                : "Ausente";
+    }
+
+    const eventoAtual =
+        await buscarEventoPorId(
+            presenca.eventoId
+        );
+
+    if (eventoAtual) {
+        await carregarEventoAberto(
+            eventoAtual.id
+        );
+    }
+}
+
+
+function atualizarResumoEvento(registros) {
+    const resumo =
+        document.querySelector(
+            "#resumo-presencas"
+        );
+
+    if (!resumo) {
+        return;
+    }
+
+    const total =
+        registros.length;
+
+    const presentes =
+        registros.filter(
+            item =>
+                item.presenca.presente
+        ).length;
+
+    const ausentes =
+        total - presentes;
+
+    resumo.innerHTML = `
+        <p>
+            <strong>Total:</strong>
+            ${total}
+            |
+            <strong>Presentes:</strong>
+            ${presentes}
+            |
+            <strong>Ausentes:</strong>
+            ${ausentes}
+        </p>
+    `;
+}

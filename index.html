@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sistema de Eventos Culturais</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+</head>
+
+<body>
+
+    <header class="cabecalho">
+        <h1>Sistema de Eventos Culturais</h1>
+        <p>Controle de eventos e presenças</p>
+    </header>
+
+    <nav class="menu-principal">
+        <button
+            type="button"
+            class="botao-menu ativo"
+            data-modulo="membros"
+        >
+            Membros
+        </button>
+
+        <button
+            type="button"
+            class="botao-menu"
+            data-modulo="eventos"
+        >
+            Eventos
+        </button>
+
+        <button
+            type="button"
+            class="botao-menu"
+            data-modulo="presencas"
+        >
+            Presenças
+        </button>
+
+        <button
+            type="button"
+            class="botao-menu"
+            data-modulo="relatorios"
+        >
+            Relatórios
+        </button>
+    </nav>
+
+    <main
+        id="conteudo-principal"
+        class="conteudo-principal"
+    >
+        <section>
+            <h2>Membros</h2>
+
+            <p>
+                Cadastro e consulta de membros.
+            </p>
+        </section>
+    </main>
+
+    <script src="js/banco.js"></script>
+    <script src="js/membros.js"></script>
+    <script src="js/eventos.js"></script>
+    <script src="js/presencas.js"></script>
+    <script src="js/relatorios.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
