@@ -585,3 +585,16 @@ td button + button {
     background-color: var(--vinho-escuro);
     color: var(--branco);
 }
+
+.cabecalho-identidade {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo-supremo {
+    width: 82px;
+    height: 82px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
