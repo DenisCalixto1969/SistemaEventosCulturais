@@ -4,28 +4,37 @@
 function carregarModuloPresencas() {
     return `
         <section class="modulo">
+
             <div class="cabecalho-modulo">
                 <div>
                     <h2>Presenças</h2>
-                    <p>Registro de presença nos eventos.</p>
+                    <p>Registro e consulta de presença nos eventos.</p>
                 </div>
             </div>
 
             <section class="painel">
+                <h3>Selecionar evento</h3>
+
+                <div id="lista-eventos-presencas">
+                    <p>Carregando eventos...</p>
+                </div>
+            </section>
+
+            <section class="painel">
                 <div id="evento-aberto">
                     <p>
-                        Selecione um evento na aba Eventos
-                        e clique em Abrir.
+                        Selecione um evento para consultar
+                        ou registrar as presenças.
                     </p>
                 </div>
             </section>
+
         </section>
     `;
 }
 
-
 async function inicializarModuloPresencas() {
-    // Por enquanto não há inicialização adicional.
+    await carregarListaEventosPresencas();
 }
 
 
@@ -481,4 +490,102 @@ async function limparPresencasOrfas() {
     });
 
     return presencasOrfas.length;
+}
+
+async function carregarListaEventosPresencas() {
+    const container =
+        document.querySelector(
+            "#lista-eventos-presencas"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    const eventos =
+        await listarEventos();
+
+    eventos.sort((a, b) =>
+        b.data.localeCompare(a.data)
+    );
+
+    if (eventos.length === 0) {
+        container.innerHTML = `
+            <p>Nenhum evento cadastrado.</p>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Evento</th>
+                    <th>Participação</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                ${eventos.map(evento => `
+                    <tr>
+                        <td>
+                            ${formatarDataEvento(evento.data)}
+                        </td>
+
+                        <td>
+                            ${obterNomeExibicaoEvento(evento)}
+                        </td>
+
+                        <td>
+                            ${obterRegraExibicaoEvento(evento)}
+                        </td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="botao-abrir-presencas"
+                                data-id="${evento.id}"
+                            >
+                                Abrir
+                            </button>
+                        </td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+    `;
+
+    container
+        .querySelectorAll(
+            ".botao-abrir-presencas"
+        )
+        .forEach(botao => {
+            botao.addEventListener(
+                "click",
+                async function () {
+                    const idEvento =
+                        botao.dataset.id;
+
+                    const evento =
+                        await buscarEventoPorId(
+                            idEvento
+                        );
+
+                    if (!evento) {
+                        return;
+                    }
+
+                    await gerarPresencasEvento(
+                        evento
+                    );
+
+                    await carregarEventoAberto(
+                        evento.id
+                    );
+                }
+            );
+        });
 }
