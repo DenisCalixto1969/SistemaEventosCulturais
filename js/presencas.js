@@ -197,7 +197,10 @@ async function abrirEventoParaPresencas(idEvento) {
 }
 
 
-async function carregarEventoAberto(idEvento) {
+async function carregarEventoAberto(
+    idEvento,
+    modo = "edicao"
+) {
     const evento =
         await buscarEventoPorId(idEvento);
 
@@ -243,14 +246,19 @@ async function carregarEventoAberto(idEvento) {
         )
     );
 
-    renderizarEventoAberto(
-        evento,
-        registros
-    );
+   renderizarEventoAberto(
+    evento,
+    registros,
+    modo
+);
 }
 
 
-function renderizarEventoAberto(evento, registros) {
+function renderizarEventoAberto(
+    evento,
+    registros,
+    modo = "edicao"
+) {                 
     const container =
         document.querySelector("#evento-aberto");
 
@@ -302,15 +310,20 @@ function renderizarEventoAberto(evento, registros) {
                                 <tr>
                                     <td>
                                         <input
-                                            type="checkbox"
-                                            class="controle-presenca"
-                                            data-id="${item.presenca.id}"
-                                            ${
-                                                item.presenca.presente
-                                                    ? "checked"
-                                                    : ""
-                                            }
-                                        >
+                        type="checkbox"
+                        class="controle-presenca"
+                     data-id="${item.presenca.id}"
+                        ${
+                            item.presenca.presente
+                                ? "checked"
+                                : ""
+                     }
+                        ${
+                         modo === "consulta"
+                                ? "disabled"
+                             : ""
+                      }
+                    >
                                     </td>
 
                                     <td>
@@ -337,7 +350,17 @@ function renderizarEventoAberto(evento, registros) {
                 `
         }
 
-        <div id="resumo-presencas"></div>
+        ${
+    modo === "consulta"
+        ? `
+            <p class="modo-consulta">
+                Modo consulta — alterações de presença estão bloqueadas.
+            </p>
+        `
+        : ""
+}
+
+<div id="resumo-presencas"></div>
     `;
 
     container
@@ -582,9 +605,10 @@ async function carregarListaEventosPresencas() {
                         evento
                     );
 
-                    await carregarEventoAberto(
-                        evento.id
-                    );
+                   await carregarEventoAberto(
+    evento.id,
+    "consulta"
+);
                 }
             );
         });
