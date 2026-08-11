@@ -110,6 +110,40 @@ if (quantidadePresencasOrfas > 0) {
                 );
             });
 
+            const botaoBackup =
+           document.querySelector("#botao-backup");
+
+             if (botaoBackup) {
+             botaoBackup.addEventListener(
+             "click",
+             exportarBackup
+            );
+            }
+
+            const botaoRestaurarBackup =
+    document.querySelector(
+        "#botao-restaurar-backup"
+    );
+
+if (botaoRestaurarBackup) {
+    botaoRestaurarBackup.addEventListener(
+        "click",
+        selecionarArquivoBackup
+    );
+}
+
+const arquivoBackup =
+    document.querySelector(
+        "#arquivo-backup"
+    );
+
+if (arquivoBackup) {
+    arquivoBackup.addEventListener(
+        "change",
+        validarArquivoBackup
+    );
+}
+
         await carregarModulo("membros");
 
         console.log(

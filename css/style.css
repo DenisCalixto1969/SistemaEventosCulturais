@@ -560,3 +560,28 @@ td button + button {
 
     font-size: 13px;
 }
+
+.botao-backup {
+    margin-left: auto;
+
+    background-color: var(--dourado);
+
+    color: var(--vinho-escuro);
+}
+
+
+.botao-backup:hover {
+    background-color: var(--dourado-claro);
+
+    color: var(--vinho-escuro);
+}
+
+.botao-restaurar {
+    background-color: var(--vinho);
+    color: var(--branco);
+}
+
+.botao-restaurar:hover {
+    background-color: var(--vinho-escuro);
+    color: var(--branco);
+}
