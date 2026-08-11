@@ -428,3 +428,57 @@ function atualizarResumoEvento(registros) {
         </p>
     `;
 }
+
+async function limparPresencasOrfas() {
+    const eventos = await listarEventos();
+    const presencas = await listarPresencas();
+
+    const idsEventosValidos =
+        new Set(
+            eventos.map(evento => evento.id)
+        );
+
+    const presencasOrfas =
+        presencas.filter(
+            presenca =>
+                !idsEventosValidos.has(
+                    presenca.eventoId
+                )
+        );
+
+    if (presencasOrfas.length === 0) {
+        return 0;
+    }
+
+    const banco = await abrirBanco();
+
+    await new Promise((resolve, reject) => {
+        const transacao = banco.transaction(
+            CONFIG_BANCO.tabelas.presencas,
+            "readwrite"
+        );
+
+        const tabela =
+            transacao.objectStore(
+                CONFIG_BANCO.tabelas.presencas
+            );
+
+        for (const presenca of presencasOrfas) {
+            tabela.delete(presenca.id);
+        }
+
+        transacao.oncomplete = function () {
+            resolve();
+        };
+
+        transacao.onerror = function () {
+            reject(transacao.error);
+        };
+
+        transacao.onabort = function () {
+            reject(transacao.error);
+        };
+    });
+
+    return presencasOrfas.length;
+}

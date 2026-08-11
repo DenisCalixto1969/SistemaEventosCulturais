@@ -749,28 +749,72 @@ async function excluirEvento(id) {
         return;
     }
 
-    const banco = await abrirBanco();
+    try {
+        const banco = await abrirBanco();
 
-    await new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.eventos,
-            "readwrite"
+        const presencas =
+            await listarPresencas();
+
+        const presencasDoEvento =
+            presencas.filter(
+                presenca =>
+                    presenca.eventoId === id
+            );
+
+          console.log("ID do evento excluído:", id);
+console.log("Total de presenças:", presencas.length);
+console.log(
+    "Presenças encontradas para este evento:",
+    presencasDoEvento.length
+);
+console.table(presencasDoEvento);  
+
+        await new Promise((resolve, reject) => {
+            const transacao = banco.transaction(
+                [
+                    CONFIG_BANCO.tabelas.eventos,
+                    CONFIG_BANCO.tabelas.presencas
+                ],
+                "readwrite"
+            );
+
+            const tabelaEventos =
+                transacao.objectStore(
+                    CONFIG_BANCO.tabelas.eventos
+                );
+
+            const tabelaPresencas =
+                transacao.objectStore(
+                    CONFIG_BANCO.tabelas.presencas
+                );
+
+            tabelaEventos.delete(id);
+
+            for (const presenca of presencasDoEvento) {
+                tabelaPresencas.delete(
+                    presenca.id
+                );
+            }
+
+            transacao.oncomplete = function () {
+                resolve();
+            };
+
+            transacao.onerror = function () {
+                reject(transacao.error);
+            };
+
+            transacao.onabort = function () {
+                reject(transacao.error);
+            };
+        });
+
+        await carregarEventos();
+
+    } catch (erro) {
+        console.error(
+            "Erro ao excluir evento:",
+            erro
         );
-
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.eventos
-        );
-
-        const requisicao = tabela.delete(id);
-
-        requisicao.onsuccess = function () {
-            resolve();
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
-
-    await carregarEventos();
+    }
 }

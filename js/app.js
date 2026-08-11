@@ -65,11 +65,18 @@ async function carregarModulo(modulo) {
     }
 }
 
-
-
 document.addEventListener("DOMContentLoaded", async function () {
     try {
         await abrirBanco();
+
+     const quantidadePresencasOrfas =
+    await limparPresencasOrfas();
+
+if (quantidadePresencasOrfas > 0) {
+    console.log(
+        `${quantidadePresencasOrfas} presença(s) órfã(s) removida(s).`
+    );
+}   
 
         document
             .querySelectorAll(".botao-menu")
