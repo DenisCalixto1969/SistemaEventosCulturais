@@ -63,6 +63,16 @@ async function carregarModulo(modulo) {
 
         return;
     }
+
+   if (modulo === "relatorios") {
+    conteudoPrincipal.innerHTML =
+        carregarModuloRelatorios();
+
+    await inicializarModuloRelatorios();
+
+    return;
+}
+
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
