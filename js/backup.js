@@ -173,61 +173,114 @@ async function restaurarBackup(backup) {
     }
 
     try {
-        const banco = await abrirBanco();
+        const membros =
+            backup.dados.membros || [];
 
-        await new Promise((resolve, reject) => {
-            const transacao = banco.transaction(
-                [
-                    CONFIG_BANCO.tabelas.membros,
-                    CONFIG_BANCO.tabelas.eventos,
-                    CONFIG_BANCO.tabelas.presencas
-                ],
-                "readwrite"
+        const eventos =
+            backup.dados.eventos || [];
+
+        const idsMembrosValidos =
+            new Set(
+                membros.map(membro => membro.id)
             );
 
-            const tabelaMembros =
-                transacao.objectStore(
-                    CONFIG_BANCO.tabelas.membros
+        const idsEventosValidos =
+            new Set(
+                eventos.map(evento => evento.id)
+            );
+
+        const presencas =
+            (backup.dados.presencas || [])
+                .filter(
+                    presenca =>
+                        idsMembrosValidos.has(
+                            presenca.membroId
+                        ) &&
+                        idsEventosValidos.has(
+                            presenca.eventoId
+                        )
+                )
+                .map(
+                    presenca => ({
+                        id: presenca.id,
+                        evento_id: presenca.eventoId,
+                        membro_id: presenca.membroId,
+                        presente: presenca.presente
+                    })
                 );
 
-            const tabelaEventos =
-                transacao.objectStore(
-                    CONFIG_BANCO.tabelas.eventos
+        // Limpa os dados atuais.
+        const { error: erroExcluirPresencas } =
+            await clienteSupabase
+                .from("presencas")
+                .delete()
+                .not("id", "is", null);
+
+        if (erroExcluirPresencas) {
+            throw erroExcluirPresencas;
+        }
+
+        const { error: erroExcluirEventos } =
+            await clienteSupabase
+                .from("eventos")
+                .delete()
+                .not("id", "is", null);
+
+        if (erroExcluirEventos) {
+            throw erroExcluirEventos;
+        }
+
+        const { error: erroExcluirMembros } =
+            await clienteSupabase
+                .from("membros")
+                .delete()
+                .not("id", "is", null);
+
+        if (erroExcluirMembros) {
+            throw erroExcluirMembros;
+        }
+
+        // Restaura membros.
+        if (membros.length > 0) {
+            const { error } =
+                await clienteSupabase
+                    .from("membros")
+                    .insert(membros);
+
+            if (error) {
+                throw new Error(
+                    `Erro ao restaurar membros: ${error.message}`
                 );
+            }
+        }
 
-            const tabelaPresencas =
-                transacao.objectStore(
-                    CONFIG_BANCO.tabelas.presencas
+        // Restaura eventos.
+        if (eventos.length > 0) {
+            const { error } =
+                await clienteSupabase
+                    .from("eventos")
+                    .insert(eventos);
+
+            if (error) {
+                throw new Error(
+                    `Erro ao restaurar eventos: ${error.message}`
                 );
-
-            tabelaMembros.clear();
-            tabelaEventos.clear();
-            tabelaPresencas.clear();
-
-            for (const membro of backup.dados.membros) {
-                tabelaMembros.put(membro);
             }
+        }
 
-            for (const evento of backup.dados.eventos) {
-                tabelaEventos.put(evento);
+        // Restaura presenças.
+        if (presencas.length > 0) {
+            const { error } =
+                await clienteSupabase
+                    .from("presencas")
+                    .insert(presencas);
+
+            if (error) {
+                throw new Error(
+                    `Erro ao restaurar presenças: ${error.message}`
+                );
             }
-
-            for (const presenca of backup.dados.presencas) {
-                tabelaPresencas.put(presenca);
-            }
-
-            transacao.oncomplete = function () {
-                resolve();
-            };
-
-            transacao.onerror = function () {
-                reject(transacao.error);
-            };
-
-            transacao.onabort = function () {
-                reject(transacao.error);
-            };
-        });
+        }
 
         alert(
             "Backup restaurado com sucesso."

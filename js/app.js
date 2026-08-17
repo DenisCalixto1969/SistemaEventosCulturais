@@ -77,9 +77,8 @@ async function carregarModulo(modulo) {
 
 document.addEventListener("DOMContentLoaded", async function () {
     try {
-        await abrirBanco();
-
-     const quantidadePresencasOrfas =
+       
+    const quantidadePresencasOrfas =
     await limparPresencasOrfas();
 
 if (quantidadePresencasOrfas > 0) {

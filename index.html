@@ -19,6 +19,54 @@
 
 <body>
 
+    <section id="tela-login">
+    <div class="login-container">
+        <h2>Acesso ao Sistema</h2>
+
+        <form id="form-login">
+            <div class="campo-formulario">
+                <label for="login-email">
+                    E-mail
+                </label>
+
+                <input
+                    type="email"
+                    id="login-email"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="campo-formulario">
+                <label for="login-senha">
+                    Senha
+                </label>
+
+                <input
+                    type="password"
+                    id="login-senha"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <div
+                id="erro-login"
+                class="mensagem-erro"
+            ></div>
+
+            <button
+                type="submit"
+                id="botao-login"
+            >
+                Entrar
+            </button>
+        </form>
+    </div>
+</section>
+
+<div id="sistema-principal" hidden>
+
     <header class="cabecalho-principal">
 
     <div class="cabecalho-identidade">
@@ -96,6 +144,13 @@
     Restaurar Backup
 </button>
 
+<button
+    type="button"
+    id="botao-sair"
+>
+    Sair
+</button>
+
 <input
     type="file"
     id="arquivo-backup"
@@ -118,6 +173,11 @@
         </section>
     </main>
 
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>  
+    <script src="js/auth.js"></script>
     <script src="js/banco.js"></script>
     <script src="js/membros.js"></script>
     <script src="js/eventos.js"></script>

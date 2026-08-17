@@ -214,58 +214,33 @@ async function salvarMembro(evento) {
     }
 }
 
-
 async function adicionarMembro(membro) {
-    const banco = await abrirBanco();
+    const { error } =
+        await clienteSupabase
+            .from("membros")
+            .insert(membro);
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.membros,
-            "readwrite"
+    if (error) {
+        throw new Error(
+            `Não foi possível adicionar o membro: ${error.message}`
         );
-
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.membros
-        );
-
-        const requisicao = tabela.add(membro);
-
-        requisicao.onsuccess = function () {
-            resolve();
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    }
 }
-
 
 async function listarMembros() {
-    const banco = await abrirBanco();
+    const { data, error } =
+        await clienteSupabase
+            .from("membros")
+            .select("*");
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.membros,
-            "readonly"
+    if (error) {
+        throw new Error(
+            `Não foi possível listar os membros: ${error.message}`
         );
+    }
 
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.membros
-        );
-
-        const requisicao = tabela.getAll();
-
-        requisicao.onsuccess = function () {
-            resolve(requisicao.result);
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    return data || [];
 }
-
 
 async function carregarMembros() {
     const container =
@@ -353,31 +328,40 @@ async function tratarAcaoMembro(evento) {
     }
 }
 
+async function atualizarMembro(membro) {
+    const { error } =
+        await clienteSupabase
+            .from("membros")
+            .update({
+                nome: membro.nome,
+                grau: membro.grau
+            })
+            .eq("id", membro.id);
+
+    if (error) {
+        throw new Error(
+            `Não foi possível atualizar o membro: ${error.message}`
+        );
+    }
+}
 
 async function buscarMembroPorId(id) {
-    const banco = await abrirBanco();
+    const { data, error } =
+        await clienteSupabase
+            .from("membros")
+            .select("*")
+            .eq("id", id)
+            .maybeSingle();
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.membros,
-            "readonly"
+    if (error) {
+        throw new Error(
+            `Não foi possível localizar o membro: ${error.message}`
         );
+    }
 
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.membros
-        );
-
-        const requisicao = tabela.get(id);
-
-        requisicao.onsuccess = function () {
-            resolve(requisicao.result);
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    return data || null;
 }
+
 
 
 async function editarMembro(id) {
@@ -410,33 +394,6 @@ async function editarMembro(id) {
     ).focus();
 }
 
-
-async function atualizarMembro(membro) {
-    const banco = await abrirBanco();
-
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.membros,
-            "readwrite"
-        );
-
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.membros
-        );
-
-        const requisicao = tabela.put(membro);
-
-        requisicao.onsuccess = function () {
-            resolve();
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
-}
-
-
 async function excluirMembro(id) {
     const confirmar = confirm(
         "Deseja realmente excluir este membro?"
@@ -446,28 +403,17 @@ async function excluirMembro(id) {
         return;
     }
 
-    const banco = await abrirBanco();
+    const { error } =
+        await clienteSupabase
+            .from("membros")
+            .delete()
+            .eq("id", id);
 
-    await new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.membros,
-            "readwrite"
+    if (error) {
+        throw new Error(
+            `Não foi possível excluir o membro: ${error.message}`
         );
-
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.membros
-        );
-
-        const requisicao = tabela.delete(id);
-
-        requisicao.onsuccess = function () {
-            resolve();
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    }
 
     await carregarMembros();
 }

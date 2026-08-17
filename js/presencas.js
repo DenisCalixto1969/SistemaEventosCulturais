@@ -53,82 +53,60 @@ function membroPodeParticiparEvento(membro, evento) {
     return grauMembro >= grauEvento;
 }
 
-
 async function listarPresencas() {
-    const banco = await abrirBanco();
+    const { data, error } =
+        await clienteSupabase
+            .from("presencas")
+            .select("*");
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.presencas,
-            "readonly"
+    if (error) {
+        throw new Error(
+            `Não foi possível listar as presenças: ${error.message}`
         );
+    }
 
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.presencas
-        );
-
-        const requisicao = tabela.getAll();
-
-        requisicao.onsuccess = function () {
-            resolve(requisicao.result);
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    return (data || []).map(presenca => ({
+        id: presenca.id,
+        eventoId: presenca.evento_id,
+        membroId: presenca.membro_id,
+        presente: presenca.presente
+    }));
 }
-
-
 async function adicionarPresenca(presenca) {
-    const banco = await abrirBanco();
+    const registroSupabase = {
+        id: presenca.id,
+        evento_id: presenca.eventoId,
+        membro_id: presenca.membroId,
+        presente: presenca.presente
+    };
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.presencas,
-            "readwrite"
+    const { error } =
+        await clienteSupabase
+            .from("presencas")
+            .insert(registroSupabase);
+
+    if (error) {
+        throw new Error(
+            `Não foi possível adicionar a presença: ${error.message}`
         );
-
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.presencas
-        );
-
-        const requisicao = tabela.add(presenca);
-
-        requisicao.onsuccess = function () {
-            resolve();
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    }
 }
-
-
 async function atualizarPresenca(presenca) {
-    const banco = await abrirBanco();
+    const { error } =
+        await clienteSupabase
+            .from("presencas")
+            .update({
+                evento_id: presenca.eventoId,
+                membro_id: presenca.membroId,
+                presente: presenca.presente
+            })
+            .eq("id", presenca.id);
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.presencas,
-            "readwrite"
+    if (error) {
+        throw new Error(
+            `Não foi possível atualizar a presença: ${error.message}`
         );
-
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.presencas
-        );
-
-        const requisicao = tabela.put(presenca);
-
-        requisicao.onsuccess = function () {
-            resolve();
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    }
 }
 
 
@@ -482,35 +460,22 @@ async function limparPresencasOrfas() {
         return 0;
     }
 
-    const banco = await abrirBanco();
-
-    await new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.presencas,
-            "readwrite"
+    const idsPresencasOrfas =
+        presencasOrfas.map(
+            presenca => presenca.id
         );
 
-        const tabela =
-            transacao.objectStore(
-                CONFIG_BANCO.tabelas.presencas
-            );
+    const { error } =
+        await clienteSupabase
+            .from("presencas")
+            .delete()
+            .in("id", idsPresencasOrfas);
 
-        for (const presenca of presencasOrfas) {
-            tabela.delete(presenca.id);
-        }
-
-        transacao.oncomplete = function () {
-            resolve();
-        };
-
-        transacao.onerror = function () {
-            reject(transacao.error);
-        };
-
-        transacao.onabort = function () {
-            reject(transacao.error);
-        };
-    });
+    if (error) {
+        throw new Error(
+            `Não foi possível limpar presenças órfãs: ${error.message}`
+        );
+    }
 
     return presencasOrfas.length;
 }

@@ -450,57 +450,33 @@ async function salvarEvento(evento) {
     }
 }
 
-
 async function adicionarEvento(evento) {
-    const banco = await abrirBanco();
+    const { error } =
+        await clienteSupabase
+            .from("eventos")
+            .insert(evento);
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.eventos,
-            "readwrite"
+    if (error) {
+        throw new Error(
+            `Não foi possível adicionar o evento: ${error.message}`
         );
-
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.eventos
-        );
-
-        const requisicao = tabela.add(evento);
-
-        requisicao.onsuccess = function () {
-            resolve();
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    }
 }
 
 async function listarEventos() {
-    const banco = await abrirBanco();
+    const { data, error } =
+        await clienteSupabase
+            .from("eventos")
+            .select("*");
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.eventos,
-            "readonly"
+    if (error) {
+        throw new Error(
+            `Não foi possível listar os eventos: ${error.message}`
         );
+    }
 
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.eventos
-        );
-
-        const requisicao = tabela.getAll();
-
-        requisicao.onsuccess = function () {
-            resolve(requisicao.result);
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    return data || [];
 }
-
 
 function formatarDataEvento(data) {
     if (!data) {
@@ -644,30 +620,21 @@ async function tratarAcaoEvento(evento) {
 }
 
 async function buscarEventoPorId(id) {
-    const banco = await abrirBanco();
+    const { data, error } =
+        await clienteSupabase
+            .from("eventos")
+            .select("*")
+            .eq("id", id)
+            .maybeSingle();
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.eventos,
-            "readonly"
+    if (error) {
+        throw new Error(
+            `Não foi possível localizar o evento: ${error.message}`
         );
+    }
 
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.eventos
-        );
-
-        const requisicao = tabela.get(id);
-
-        requisicao.onsuccess = function () {
-            resolve(requisicao.result);
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    return data || null;
 }
-
 
 async function editarEvento(id) {
     const evento = await buscarEventoPorId(id);
@@ -713,32 +680,24 @@ async function editarEvento(id) {
     ).focus();
 }
 
-
 async function atualizarEvento(evento) {
-    const banco = await abrirBanco();
+    const { error } =
+        await clienteSupabase
+            .from("eventos")
+            .update({
+                data: evento.data,
+                tipo: evento.tipo,
+                nome: evento.nome,
+                grau: evento.grau
+            })
+            .eq("id", evento.id);
 
-    return new Promise((resolve, reject) => {
-        const transacao = banco.transaction(
-            CONFIG_BANCO.tabelas.eventos,
-            "readwrite"
+    if (error) {
+        throw new Error(
+            `Não foi possível atualizar o evento: ${error.message}`
         );
-
-        const tabela = transacao.objectStore(
-            CONFIG_BANCO.tabelas.eventos
-        );
-
-        const requisicao = tabela.put(evento);
-
-        requisicao.onsuccess = function () {
-            resolve();
-        };
-
-        requisicao.onerror = function () {
-            reject(requisicao.error);
-        };
-    });
+    }
 }
-
 
 async function excluirEvento(id) {
     const confirmar = confirm(
@@ -749,72 +708,17 @@ async function excluirEvento(id) {
         return;
     }
 
-    try {
-        const banco = await abrirBanco();
+    const { error } =
+        await clienteSupabase
+            .from("eventos")
+            .delete()
+            .eq("id", id);
 
-        const presencas =
-            await listarPresencas();
-
-        const presencasDoEvento =
-            presencas.filter(
-                presenca =>
-                    presenca.eventoId === id
-            );
-
-          console.log("ID do evento excluído:", id);
-console.log("Total de presenças:", presencas.length);
-console.log(
-    "Presenças encontradas para este evento:",
-    presencasDoEvento.length
-);
-console.table(presencasDoEvento);  
-
-        await new Promise((resolve, reject) => {
-            const transacao = banco.transaction(
-                [
-                    CONFIG_BANCO.tabelas.eventos,
-                    CONFIG_BANCO.tabelas.presencas
-                ],
-                "readwrite"
-            );
-
-            const tabelaEventos =
-                transacao.objectStore(
-                    CONFIG_BANCO.tabelas.eventos
-                );
-
-            const tabelaPresencas =
-                transacao.objectStore(
-                    CONFIG_BANCO.tabelas.presencas
-                );
-
-            tabelaEventos.delete(id);
-
-            for (const presenca of presencasDoEvento) {
-                tabelaPresencas.delete(
-                    presenca.id
-                );
-            }
-
-            transacao.oncomplete = function () {
-                resolve();
-            };
-
-            transacao.onerror = function () {
-                reject(transacao.error);
-            };
-
-            transacao.onabort = function () {
-                reject(transacao.error);
-            };
-        });
-
-        await carregarEventos();
-
-    } catch (erro) {
-        console.error(
-            "Erro ao excluir evento:",
-            erro
+    if (error) {
+        throw new Error(
+            `Não foi possível excluir o evento: ${error.message}`
         );
     }
+
+    await carregarEventos();
 }
