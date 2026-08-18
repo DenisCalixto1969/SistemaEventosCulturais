@@ -89,13 +89,13 @@ function configurarLogin() {
 
             try {
                 await entrarNoSistema(
-                    email,
-                    senha
-                );
+        email,
+        senha
+    );
 
-                window.location.reload();
+    await verificarAutenticacao();
 
-            } catch (erro) {
+} catch (erro) {
                 erroLogin.textContent =
                     "E-mail ou senha inválidos.";
             }

@@ -598,3 +598,120 @@ td button + button {
     object-fit: contain;
     flex-shrink: 0;
 }
+/* =========================
+   Tela de Login
+========================= */
+
+#tela-login[hidden] {
+    display: none;
+}
+
+#tela-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #f3efe9;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    border-top: 5px solid #8b0d18;
+}
+
+.login-container h2 {
+    margin: 0 0 24px;
+    text-align: center;
+    color: #7d0b14;
+    font-size: 26px;
+}
+
+#form-login {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#form-login .campo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+#form-login label {
+    font-weight: 600;
+    color: #3d3d3d;
+}
+
+#form-login input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #c9c9c9;
+    border-radius: 7px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#form-login input:focus {
+    border-color: #8b0d18;
+    box-shadow: 0 0 0 3px rgba(139, 13, 24, 0.12);
+}
+
+#erro-login {
+    min-height: 18px;
+    color: #b42318;
+    font-size: 14px;
+    text-align: center;
+}
+
+#botao-login {
+    width: 100%;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 7px;
+    background: #8b0d18;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+#botao-login:hover {
+    background: #6f0911;
+}
+
+#botao-login:active {
+    transform: translateY(1px);
+}
+
+@media (max-width: 520px) {
+    #tela-login {
+        padding: 16px;
+    }
+
+    .login-container {
+        padding: 24px 20px;
+    }
+}
+
+.login-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+
+.login-logo img {
+    width: 95px;
+    height: 95px;
+    object-fit: contain;
+}
+
