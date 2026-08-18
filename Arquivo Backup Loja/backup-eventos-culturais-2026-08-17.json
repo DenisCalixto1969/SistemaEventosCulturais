@@ -1,0 +1,551 @@
+{
+  "sistema": "Sistema Cadastro de Eventos Culturais",
+  "versaoBackup": 1,
+  "dataBackup": "2026-08-17T20:06:15.601Z",
+  "dados": {
+    "membros": [
+      {
+        "id": "010244aa-2682-4e9e-b716-5a73e8a4a21a",
+        "nome": "Francisco Zapolatta Junior",
+        "grau": 32
+      },
+      {
+        "id": "028aa27c-bd3b-4484-8759-c7ae5147de8c",
+        "nome": "Thallew Caldato Araujo",
+        "grau": 12
+      },
+      {
+        "id": "081827c4-ff9b-43fa-a0b2-8dc6e8ee5311",
+        "nome": "Ademir Jesus de Oliveira",
+        "grau": 33
+      },
+      {
+        "id": "1475f94c-529c-4727-a6f3-3c3accd0f0d9",
+        "nome": "Carlos Alberto Petean de Andrade",
+        "grau": 30
+      },
+      {
+        "id": "1ee42795-e612-4062-bdfe-3b23aa3c1a17",
+        "nome": "Jose Amelio Monteiro Junior",
+        "grau": 4
+      },
+      {
+        "id": "2be2f147-c87c-4632-a2e8-45c4ec110eb9",
+        "nome": "Cesar Augusto Basaglia",
+        "grau": 18
+      },
+      {
+        "id": "33ac3853-6381-4453-b3c5-26cae1bbff5f",
+        "nome": "Joao Carlos Pereira Esteves",
+        "grau": 32
+      },
+      {
+        "id": "4b0b0c81-5526-4c8c-acd6-0f7ede271ac6",
+        "nome": "Amaury Daniel Ramos Nogueira",
+        "grau": 32
+      },
+      {
+        "id": "4fd4c50b-fbe2-49e1-b564-8dfbd7bb9cf5",
+        "nome": "Murilo Hirata Shimada",
+        "grau": 4
+      },
+      {
+        "id": "58de261e-df0b-4891-9787-fbb8f3630994",
+        "nome": "Carlos Pereira Rodrigues",
+        "grau": 4
+      },
+      {
+        "id": "60e21237-3a94-457e-bf5e-c3352300789d",
+        "nome": "Denilson Aparecido Calixto",
+        "grau": 30
+      },
+      {
+        "id": "612fe565-0839-4e6e-acfc-b4886570a963",
+        "nome": "Alexandre Milanezi Nogueira",
+        "grau": 33
+      },
+      {
+        "id": "73967aa1-accd-40d5-be3f-cc4cb6216ed2",
+        "nome": "Cristiano Cesar Maretti",
+        "grau": 4
+      },
+      {
+        "id": "7d80494e-615f-45ca-a8bb-912730fd06e5",
+        "nome": "Claudemir Liberale",
+        "grau": 28
+      },
+      {
+        "id": "8d934798-fd3c-40ee-9a71-027bc4da5d1b",
+        "nome": "Pedro dos Santos Francisco",
+        "grau": 32
+      },
+      {
+        "id": "8fac77d4-9080-45b1-9ca8-1f2c7b3dad39",
+        "nome": "Marcos da Silva Dias",
+        "grau": 18
+      },
+      {
+        "id": "8ff08e0a-8872-4a0d-b417-7ee395aa0233",
+        "nome": "Lucas da Costa da Silva",
+        "grau": 9
+      },
+      {
+        "id": "948b0892-4bb9-47ff-9259-2a3b3903e351",
+        "nome": "Silvio Marinho Gimenes",
+        "grau": 33
+      },
+      {
+        "id": "a0161728-ed01-4962-8820-749267e14625",
+        "nome": "Luiz Tadeu Gonçalves Pegino",
+        "grau": 33
+      },
+      {
+        "id": "a5977571-29a4-4f86-8e3d-520c39bac298",
+        "nome": "Luis Gilberto Bonadio Franco",
+        "grau": 4
+      },
+      {
+        "id": "ade03ae6-2b8e-4cfa-bbea-6b678a74b84b",
+        "nome": "Wladimir Silva Caldeira",
+        "grau": 18
+      },
+      {
+        "id": "b054b190-b795-46df-acec-22d60a2032ab",
+        "nome": "Manoel Jose G. de Soutello",
+        "grau": 33
+      },
+      {
+        "id": "bf462074-d05a-45c3-b078-bd78bbce0815",
+        "nome": "Waldinei Ferreira Costa",
+        "grau": 4
+      },
+      {
+        "id": "c33424b4-225b-441b-b35f-da2e7d87b814",
+        "nome": "Assis Sales de Oliveira",
+        "grau": 32
+      },
+      {
+        "id": "c39f2b9d-c89d-46d6-9c44-94e10a00b07f",
+        "nome": "Jose Antonio Felissiani",
+        "grau": 33
+      },
+      {
+        "id": "c8675536-8b91-4a14-b453-78e22a284d96",
+        "nome": "Jorge Henrique Bernardes da Silva",
+        "grau": 15
+      },
+      {
+        "id": "c9055a08-866b-4b8e-bf09-59dea896549b",
+        "nome": "Nagib Habib Asseis Neto",
+        "grau": 18
+      },
+      {
+        "id": "d0cd1dc3-e974-4623-89da-46db2dd41e37",
+        "nome": "Vandir Alves Moreira",
+        "grau": 32
+      },
+      {
+        "id": "d81ed2df-4b0a-48a3-9b43-3435d6eae6a5",
+        "nome": "Adão Valentim Garrido",
+        "grau": 33
+      },
+      {
+        "id": "e1533f55-42d8-4705-90c9-531645e69d20",
+        "nome": "Hamilton Rufo",
+        "grau": 33
+      },
+      {
+        "id": "e7f5c1a0-de9e-4434-a100-5154deb6401c",
+        "nome": "Antonio Carlos Ferreira da Silva",
+        "grau": 33
+      },
+      {
+        "id": "ea40bb3a-7c6a-4941-86c2-fc1b2aee3123",
+        "nome": "Alan Rogerio Morelli",
+        "grau": 18
+      },
+      {
+        "id": "edbda785-2cd1-47d6-b200-1d4e5f56c848",
+        "nome": "Eliseu Menegali Costa",
+        "grau": 33
+      },
+      {
+        "id": "f5bed9ce-4294-4fa9-813b-3b79ae90c55d",
+        "nome": "Francisco Oliveira Silva",
+        "grau": 32
+      }
+    ],
+    "eventos": [
+      {
+        "id": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "data": "2025-11-12",
+        "tipo": "Fórum de Debates",
+        "nome": "",
+        "grau": 4
+      },
+      {
+        "id": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "data": "2026-04-02",
+        "tipo": "5ª Feira de Endoenças",
+        "nome": "",
+        "grau": 18
+      }
+    ],
+    "presencas": [
+      {
+        "id": "0d813945-507c-4882-9aec-eda985365146",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "e7f5c1a0-de9e-4434-a100-5154deb6401c",
+        "presente": true
+      },
+      {
+        "id": "0e2bc813-f339-4c47-a8fb-ccefaaedb044",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "8ff08e0a-8872-4a0d-b417-7ee395aa0233",
+        "presente": true
+      },
+      {
+        "id": "11f47967-ede7-4766-84ca-3c9cefb75ee6",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "e7f5c1a0-de9e-4434-a100-5154deb6401c",
+        "presente": true
+      },
+      {
+        "id": "1267b232-02c4-4003-9346-0a99191471ca",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "73967aa1-accd-40d5-be3f-cc4cb6216ed2",
+        "presente": false
+      },
+      {
+        "id": "12d077fc-5a59-41a2-b2f0-22c9a8463f17",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "d0cd1dc3-e974-4623-89da-46db2dd41e37",
+        "presente": true
+      },
+      {
+        "id": "21a20719-6c00-4e74-b2f7-b5bd465fe118",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "e1533f55-42d8-4705-90c9-531645e69d20",
+        "presente": true
+      },
+      {
+        "id": "25965f69-b721-471e-b25e-f41074cde6d6",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "2be2f147-c87c-4632-a2e8-45c4ec110eb9",
+        "presente": false
+      },
+      {
+        "id": "30cf2963-bacd-47dc-ae87-527965e36787",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "ea40bb3a-7c6a-4941-86c2-fc1b2aee3123",
+        "presente": false
+      },
+      {
+        "id": "355971c3-52bd-42d7-9ae2-21283e8bbe23",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "612fe565-0839-4e6e-acfc-b4886570a963",
+        "presente": false
+      },
+      {
+        "id": "3be8f930-bada-48b8-87fe-2d6da9918c8d",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "010244aa-2682-4e9e-b716-5a73e8a4a21a",
+        "presente": true
+      },
+      {
+        "id": "3c378647-7b1f-4f4e-81d4-b05495ac37ab",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "f5bed9ce-4294-4fa9-813b-3b79ae90c55d",
+        "presente": false
+      },
+      {
+        "id": "3dac4d3b-be7d-4713-90df-bd2f8620d0d0",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "7d80494e-615f-45ca-a8bb-912730fd06e5",
+        "presente": true
+      },
+      {
+        "id": "41076559-2d56-45d4-b728-6cd75f343deb",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "081827c4-ff9b-43fa-a0b2-8dc6e8ee5311",
+        "presente": false
+      },
+      {
+        "id": "47abd77c-3e32-4c6c-a3cb-dfbf934cbd56",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "2be2f147-c87c-4632-a2e8-45c4ec110eb9",
+        "presente": true
+      },
+      {
+        "id": "48168661-84f9-45e6-8661-2e73466cd14c",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "4b0b0c81-5526-4c8c-acd6-0f7ede271ac6",
+        "presente": true
+      },
+      {
+        "id": "4a13da7e-c564-4586-970d-8264bd453d27",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "c9055a08-866b-4b8e-bf09-59dea896549b",
+        "presente": true
+      },
+      {
+        "id": "4d976ae7-a63b-43d3-aea2-83f8e922ac48",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "612fe565-0839-4e6e-acfc-b4886570a963",
+        "presente": false
+      },
+      {
+        "id": "554af9d8-ff3a-483d-b365-fa2cf1dcc706",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "028aa27c-bd3b-4484-8759-c7ae5147de8c",
+        "presente": true
+      },
+      {
+        "id": "5825dec5-212c-4722-8522-5e2cf8e6aa08",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "ea40bb3a-7c6a-4941-86c2-fc1b2aee3123",
+        "presente": false
+      },
+      {
+        "id": "5e13a797-001e-4dde-9c9c-6da648928ded",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "c39f2b9d-c89d-46d6-9c44-94e10a00b07f",
+        "presente": true
+      },
+      {
+        "id": "609d6690-34a0-4e70-9826-09828e605cb9",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "c9055a08-866b-4b8e-bf09-59dea896549b",
+        "presente": true
+      },
+      {
+        "id": "62d35cfc-ef49-4e21-895e-37c5ab35ef69",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "ade03ae6-2b8e-4cfa-bbea-6b678a74b84b",
+        "presente": true
+      },
+      {
+        "id": "738264f5-b3f9-4863-86e6-17508b96a5e0",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "010244aa-2682-4e9e-b716-5a73e8a4a21a",
+        "presente": true
+      },
+      {
+        "id": "7abbb53e-5940-440d-91e7-c72a61985aba",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "58de261e-df0b-4891-9787-fbb8f3630994",
+        "presente": false
+      },
+      {
+        "id": "7acd3f0b-6fa8-4637-a722-718e16221f5e",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "1475f94c-529c-4727-a6f3-3c3accd0f0d9",
+        "presente": true
+      },
+      {
+        "id": "81d9372d-b6fa-4b6d-88b9-f8f637ce5c05",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "f5bed9ce-4294-4fa9-813b-3b79ae90c55d",
+        "presente": true
+      },
+      {
+        "id": "84698106-ce70-4cb7-92d4-61dd18bcd4c9",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "b054b190-b795-46df-acec-22d60a2032ab",
+        "presente": false
+      },
+      {
+        "id": "8723320c-7ea1-4df9-8b20-b79a702117c8",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "e1533f55-42d8-4705-90c9-531645e69d20",
+        "presente": false
+      },
+      {
+        "id": "88cf7e7d-bbf0-4574-b776-6acc499e343d",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "c8675536-8b91-4a14-b453-78e22a284d96",
+        "presente": true
+      },
+      {
+        "id": "89bffff5-e4aa-4604-987e-175e228fb417",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "edbda785-2cd1-47d6-b200-1d4e5f56c848",
+        "presente": true
+      },
+      {
+        "id": "8edcaaa4-50f2-42ef-a52c-9e5af7c16ed0",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "a0161728-ed01-4962-8820-749267e14625",
+        "presente": false
+      },
+      {
+        "id": "92b4f57c-20fa-400f-ad7c-e4ee91258a26",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "1ee42795-e612-4062-bdfe-3b23aa3c1a17",
+        "presente": false
+      },
+      {
+        "id": "9a22ce4b-dc20-4452-9eee-a36feccd831f",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "bf462074-d05a-45c3-b078-bd78bbce0815",
+        "presente": false
+      },
+      {
+        "id": "9a61c1fb-3916-4421-aadb-8c10bab4bdfb",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "948b0892-4bb9-47ff-9259-2a3b3903e351",
+        "presente": false
+      },
+      {
+        "id": "9c0e49ed-985a-4d4e-8c98-b71e4879c2cf",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "c33424b4-225b-441b-b35f-da2e7d87b814",
+        "presente": true
+      },
+      {
+        "id": "9c64fc35-efa6-47ef-901d-c5e156fb1d00",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "7d80494e-615f-45ca-a8bb-912730fd06e5",
+        "presente": true
+      },
+      {
+        "id": "9e3b653b-6599-4ec0-9cee-3286b9af0aea",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "d81ed2df-4b0a-48a3-9b43-3435d6eae6a5",
+        "presente": false
+      },
+      {
+        "id": "9f03df51-bd47-42c8-bdb8-4cfbb1d970b8",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "d81ed2df-4b0a-48a3-9b43-3435d6eae6a5",
+        "presente": true
+      },
+      {
+        "id": "a30d3e2f-d5e9-4c5e-8280-59500a3df4ed",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "60e21237-3a94-457e-bf5e-c3352300789d",
+        "presente": true
+      },
+      {
+        "id": "a8c9864e-45ab-4f18-ac73-df4d386486cf",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "c39f2b9d-c89d-46d6-9c44-94e10a00b07f",
+        "presente": true
+      },
+      {
+        "id": "aa469722-b01f-4375-85b8-1e0ef611d50a",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "d0cd1dc3-e974-4623-89da-46db2dd41e37",
+        "presente": true
+      },
+      {
+        "id": "b8574c10-4a5b-46b1-923b-8292a74368cc",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "4b0b0c81-5526-4c8c-acd6-0f7ede271ac6",
+        "presente": true
+      },
+      {
+        "id": "d113d657-c6c9-4857-bfc1-3a3e36414dd8",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "8fac77d4-9080-45b1-9ca8-1f2c7b3dad39",
+        "presente": false
+      },
+      {
+        "id": "d82f89ef-542c-4d73-a797-8cfbbb1ca2b0",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "8d934798-fd3c-40ee-9a71-027bc4da5d1b",
+        "presente": true
+      },
+      {
+        "id": "da001222-4465-4230-b217-4f472d19d47b",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "8d934798-fd3c-40ee-9a71-027bc4da5d1b",
+        "presente": true
+      },
+      {
+        "id": "dce163d5-82ba-4b42-88d0-c5538dc9ea39",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "948b0892-4bb9-47ff-9259-2a3b3903e351",
+        "presente": false
+      },
+      {
+        "id": "dd876b85-1833-4f2f-95ed-c040735c4a1a",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "4fd4c50b-fbe2-49e1-b564-8dfbd7bb9cf5",
+        "presente": false
+      },
+      {
+        "id": "ddb7f3e3-d15a-4947-adf6-634d5a5a232c",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "081827c4-ff9b-43fa-a0b2-8dc6e8ee5311",
+        "presente": false
+      },
+      {
+        "id": "e1cc4748-9cef-4945-b83a-d8b5169570f3",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "33ac3853-6381-4453-b3c5-26cae1bbff5f",
+        "presente": true
+      },
+      {
+        "id": "e1fa3204-cb57-443b-8ca2-824fd5b5ff9c",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "33ac3853-6381-4453-b3c5-26cae1bbff5f",
+        "presente": true
+      },
+      {
+        "id": "e902eb0d-073c-4da0-bea8-106d008c183b",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "ade03ae6-2b8e-4cfa-bbea-6b678a74b84b",
+        "presente": false
+      },
+      {
+        "id": "e9a88bd0-77fa-41e8-a8c2-43884a351634",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "a0161728-ed01-4962-8820-749267e14625",
+        "presente": true
+      },
+      {
+        "id": "ea7f6ec4-c4a1-4c3c-b8b5-dbbd6fa5d72a",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "edbda785-2cd1-47d6-b200-1d4e5f56c848",
+        "presente": true
+      },
+      {
+        "id": "eb2b0bd3-a4c1-4b27-b247-3c4577be51a9",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "a5977571-29a4-4f86-8e3d-520c39bac298",
+        "presente": false
+      },
+      {
+        "id": "ebfc97af-8d73-4344-9a61-7e6fb770bc21",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "b054b190-b795-46df-acec-22d60a2032ab",
+        "presente": false
+      },
+      {
+        "id": "ed9a7d04-9e33-4e26-8b91-07c3d364eb27",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "c33424b4-225b-441b-b35f-da2e7d87b814",
+        "presente": false
+      },
+      {
+        "id": "f3203f42-5666-47df-a9ad-d68b07dd80f5",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "1475f94c-529c-4727-a6f3-3c3accd0f0d9",
+        "presente": true
+      },
+      {
+        "id": "f48eb266-155c-4b9a-8a94-d57c1d49561d",
+        "eventoId": "b65df2c7-b873-4364-8388-ec9800e4a1fb",
+        "membroId": "60e21237-3a94-457e-bf5e-c3352300789d",
+        "presente": true
+      },
+      {
+        "id": "f8a64ffe-e9ff-4f6d-86ff-2b9d50d32846",
+        "eventoId": "83d30c0b-3876-43f3-9cd8-bff2a9402d1b",
+        "membroId": "8fac77d4-9080-45b1-9ca8-1f2c7b3dad39",
+        "presente": true
+      }
+    ]
+  }
+}
