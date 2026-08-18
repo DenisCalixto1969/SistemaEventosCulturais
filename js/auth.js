@@ -93,8 +93,8 @@ function configurarLogin() {
         senha
     );
 
-    await verificarAutenticacao();
-
+    window.location.reload();
+    
 } catch (erro) {
                 erroLogin.textContent =
                     "E-mail ou senha inválidos.";
