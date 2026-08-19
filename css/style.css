@@ -752,11 +752,20 @@ td button + button {
         gap: 6px;
     }
 
-    .botao-menu {
-        flex: 1 1 45%;
-        padding: 10px 8px;
-        text-align: center;
-    }
+   .botao-menu {
+    flex: 1 1 45%;
+    padding: 10px 8px;
+    text-align: center;
+
+    background-color: #f3e7e8;
+    border: 1px solid var(--vinho);
+    border-radius: 6px;
+}
+
+.botao-menu.ativo {
+    background-color: var(--vinho);
+    color: var(--branco);
+}
 
     .conteudo-principal {
         padding: 20px 12px 40px;
