@@ -767,6 +767,10 @@ td button + button {
     color: var(--branco);
 }
 
+.botao-menu-restaurar {
+    color: var(--vinho);
+}
+
     .conteudo-principal {
         padding: 20px 12px 40px;
     }
