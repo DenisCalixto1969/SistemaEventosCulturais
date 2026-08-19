@@ -715,3 +715,92 @@ td button + button {
     object-fit: contain;
 }
 
+
+/* =========================
+   RESPONSIVIDADE DO SISTEMA
+========================= */
+
+@media (max-width: 768px) {
+
+    .cabecalho {
+        padding: 20px 16px;
+    }
+
+    .cabecalho-identidade {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .logo-supremo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .cabecalho h1 {
+        font-size: 23px;
+    }
+
+    .cabecalho p {
+        font-size: 13px;
+    }
+
+    .menu-principal {
+        flex-wrap: wrap;
+        padding: 10px 12px;
+        gap: 6px;
+    }
+
+    .botao-menu {
+        flex: 1 1 45%;
+        padding: 10px 8px;
+        text-align: center;
+    }
+
+    .conteudo-principal {
+        padding: 20px 12px 40px;
+    }
+
+    .cabecalho-modulo {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .cabecalho-modulo h2 {
+        font-size: 22px;
+    }
+
+    .painel {
+        padding: 14px;
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 650px;
+    }
+
+    .acoes-formulario {
+        flex-direction: column;
+    }
+
+    .acoes-formulario button {
+        width: 100%;
+    }
+
+    #formulario-relatorio input[type="date"],
+    #formulario-relatorio select {
+        width: 100%;
+    }
+
+    .modal {
+        padding: 12px;
+    }
+
+    .modal-conteudo {
+        padding: 20px 16px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
