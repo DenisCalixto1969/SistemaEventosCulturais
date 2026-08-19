@@ -741,9 +741,10 @@ td button + button {
         font-size: 23px;
     }
 
-    .cabecalho p {
-        font-size: 13px;
-    }
+   .cabecalho p {
+    font-size: 12px;
+    line-height: 1.4;
+}
 
     .menu-principal {
         flex-wrap: wrap;
