@@ -106,3 +106,21 @@ function configurarLogin() {
 document
     .getElementById("botao-sair")
     .addEventListener("click", sairDoSistema);
+
+  // Mostrar / ocultar senha
+const botaoMostrarSenha = document.getElementById("mostrar-senha");
+const campoSenha = document.getElementById("login-senha");
+
+botaoMostrarSenha.addEventListener("click", function () {
+
+    if (campoSenha.type === "password") {
+        campoSenha.type = "text";
+        botaoMostrarSenha.textContent = "🙈";
+        botaoMostrarSenha.setAttribute("aria-label", "Ocultar senha");
+    } else {
+        campoSenha.type = "password";
+        botaoMostrarSenha.textContent = "👁️";
+        botaoMostrarSenha.setAttribute("aria-label", "Mostrar senha");
+    }
+
+});  

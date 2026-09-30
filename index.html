@@ -43,18 +43,29 @@
                 >
             </div>
 
-            <div class="campo-formulario">
-                <label for="login-senha">
-                    Senha
-                </label>
+           <div class="campo-formulario">
+    <label for="login-senha">
+        Senha
+    </label>
 
-                <input
-                    type="password"
-                    id="login-senha"
-                    required
-                    autocomplete="current-password"
-                >
-            </div>
+    <div class="campo-senha">
+        <input
+            type="password"
+            id="login-senha"
+            required
+            autocomplete="current-password"
+        >
+
+        <button
+            type="button"
+            id="mostrar-senha"
+            class="botao-olho"
+            aria-label="Mostrar senha"
+        >
+            👁️
+        </button>
+    </div>
+</div>
 
             <div
                 id="erro-login"

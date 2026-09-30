@@ -817,3 +817,29 @@ td button + button {
     }
 }
 
+/* Campo de senha com botão mostrar/ocultar */
+.campo-senha {
+    position: relative;
+    width: 100%;
+}
+
+.campo-senha input {
+    width: 100%;
+    padding-right: 45px;
+    box-sizing: border-box;
+}
+
+.botao-olho {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    font-size: 18px;
+    padding: 4px;
+}
+
