@@ -53,44 +53,6 @@ function membroPodeParticiparEvento(membro, evento) {
     return grauMembro >= grauEvento;
 }
 
-async function listarPresencas() {
-    const { data, error } =
-        await clienteSupabase
-            .from("presencas")
-            .select("*");
-
-    if (error) {
-        throw new Error(
-            `Não foi possível listar as presenças: ${error.message}`
-        );
-    }
-
-    return (data || []).map(presenca => ({
-        id: presenca.id,
-        eventoId: presenca.evento_id,
-        membroId: presenca.membro_id,
-        presente: presenca.presente
-    }));
-}
-async function adicionarPresenca(presenca) {
-    const registroSupabase = {
-        id: presenca.id,
-        evento_id: presenca.eventoId,
-        membro_id: presenca.membroId,
-        presente: presenca.presente
-    };
-
-    const { error } =
-        await clienteSupabase
-            .from("presencas")
-            .insert(registroSupabase);
-
-    if (error) {
-        throw new Error(
-            `Não foi possível adicionar a presença: ${error.message}`
-        );
-    }
-}
 async function atualizarPresenca(presenca) {
     const { error } =
         await clienteSupabase
@@ -111,6 +73,12 @@ async function atualizarPresenca(presenca) {
 
 
 async function gerarPresencasEvento(evento) {
+
+    // Não gerar registros se a lista estiver encerrada
+    if (evento.lista_presencas_encerrada === true) {
+        return 0;
+    }
+
     const membros = await listarMembros();
 
     const presencasExistentes =
@@ -133,6 +101,7 @@ async function gerarPresencasEvento(evento) {
     let quantidadeCriada = 0;
 
     for (const membro of membrosAptos) {
+
         const jaExiste =
             presencasDoEvento.some(
                 presenca =>
@@ -158,7 +127,6 @@ async function gerarPresencasEvento(evento) {
     return quantidadeCriada;
 }
 
-
 async function abrirEventoParaPresencas(idEvento) {
     const evento =
         await buscarEventoPorId(idEvento);
@@ -177,33 +145,33 @@ async function abrirEventoParaPresencas(idEvento) {
 
 async function carregarEventoAberto(
     idEvento,
-    modo = "edicao"
+    modo = null
 ) {
-    const evento =
-        await buscarEventoPorId(idEvento);
+    const evento = await buscarEventoPorId(idEvento);
 
     if (!evento) {
         return;
     }
 
-    const todasPresencas =
-        await listarPresencas();
+    // Define automaticamente o modo de exibição.
+    if (modo === null) {
+        modo = evento.lista_presencas_encerrada === true
+            ? "consulta"
+            : "edicao";
+    }
 
-    const presencasEvento =
-        todasPresencas.filter(
-            presenca =>
-                presenca.eventoId === evento.id
-        );
+    const todasPresencas = await listarPresencas();
 
-    const membros =
-        await listarMembros();
+    const presencasEvento = todasPresencas.filter(
+        presenca => presenca.eventoId === evento.id
+    );
 
+    const membros = await listarMembros();
     const registros = [];
 
     for (const presenca of presencasEvento) {
         const membro = membros.find(
-            item =>
-                item.id === presenca.membroId
+            item => item.id === presenca.membroId
         );
 
         if (!membro) {
@@ -216,6 +184,8 @@ async function carregarEventoAberto(
         });
     }
 
+    // Mantém a lista sempre em ordem alfabética,
+    // independentemente do status de presença.
     registros.sort((a, b) =>
         a.membro.nome.localeCompare(
             b.membro.nome,
@@ -224,19 +194,68 @@ async function carregarEventoAberto(
         )
     );
 
-   renderizarEventoAberto(
-    evento,
-    registros,
-    modo
-);
+    console.log("MODO DO EVENTO:", modo);
+    console.log(
+        "LISTA ENCERRADA:",
+        evento.lista_presencas_encerrada
+    );
+
+    // Renderiza uma única vez, depois de montar todos os registros.
+    renderizarEventoAberto(
+        evento,
+        registros,
+        modo
+    );
 }
 
+
+async function listarPresencas() {
+
+    const { data, error } =
+        await clienteSupabase
+            .from("presencas")
+            .select("*");
+
+    if (error) {
+        throw new Error(
+            `Não foi possível listar as presenças: ${error.message}`
+        );
+    }
+
+    return (data || []).map(item => ({
+        id: item.id,
+        eventoId: item.evento_id,
+        membroId: item.membro_id,
+        presente: item.presente
+    }));
+}
+
+
+async function adicionarPresenca(presenca) {
+
+    const { error } =
+        await clienteSupabase
+            .from("presencas")
+            .insert({
+                id: presenca.id,
+                evento_id: presenca.eventoId,
+                membro_id: presenca.membroId,
+                presente: presenca.presente
+            });
+
+    if (error) {
+        throw new Error(
+            `Não foi possível adicionar a presença: ${error.message}`
+        );
+    }
+}
 
 function renderizarEventoAberto(
     evento,
     registros,
     modo = "edicao"
-) {                 
+) {
+
     const container =
         document.querySelector("#evento-aberto");
 
@@ -244,8 +263,17 @@ function renderizarEventoAberto(
         return;
     }
 
+    const listaEncerrada =
+        evento.lista_presencas_encerrada === true;
+
+        console.log("MODO:", modo);
+console.log("LISTA ENCERRADA:", listaEncerrada);
+console.log("EVENTO:", evento);
+
     container.innerHTML = `
+
         <div class="cabecalho-evento-aberto">
+
             <h3>
                 ${obterNomeExibicaoEvento(evento)}
             </h3>
@@ -259,6 +287,17 @@ function renderizarEventoAberto(
                 Participação:
                 ${obterRegraExibicaoEvento(evento)}
             </p>
+
+            ${
+                listaEncerrada
+                    ? `
+                        <p class="modo-consulta">
+                            LISTA DE PRESENÇAS ENCERRADA
+                        </p>
+                    `
+                    : ""
+            }
+
         </div>
 
         <hr>
@@ -274,6 +313,7 @@ function renderizarEventoAberto(
                 `
                 : `
                     <table>
+
                         <thead>
                             <tr>
                                 <th>Presente</th>
@@ -284,24 +324,28 @@ function renderizarEventoAberto(
                         </thead>
 
                         <tbody>
+
                             ${registros.map(item => `
+
                                 <tr>
+
                                     <td>
                                         <input
-                        type="checkbox"
-                        class="controle-presenca"
-                     data-id="${item.presenca.id}"
-                        ${
-                            item.presenca.presente
-                                ? "checked"
-                                : ""
-                     }
-                        ${
-                         modo === "consulta"
-                                ? "disabled"
-                             : ""
-                      }
-                    >
+                                            type="checkbox"
+                                            class="controle-presenca"
+                                            data-id="${item.presenca.id}"
+                                            ${
+                                                item.presenca.presente
+                                                    ? "checked"
+                                                    : ""
+                                            }
+                                            ${
+                                                modo === "consulta" ||
+                                                listaEncerrada
+                                                    ? "disabled"
+                                                    : ""
+                                            }
+                                        >
                                     </td>
 
                                     <td>
@@ -312,49 +356,118 @@ function renderizarEventoAberto(
                                         Grau ${item.membro.grau}
                                     </td>
 
-                                    <td
-                                        id="status-${item.presenca.id}"
-                                    >
+                                    <td id="status-${item.presenca.id}">
                                         ${
                                             item.presenca.presente
                                                 ? "Presente"
                                                 : "Ausente"
                                         }
                                     </td>
+
                                 </tr>
+
                             `).join("")}
+
                         </tbody>
+
                     </table>
                 `
         }
 
         ${
-    modo === "consulta"
-        ? `
-            <p class="modo-consulta">
-                Modo consulta — alterações de presença estão bloqueadas.
-            </p>
-        `
-        : ""
-}
+            modo === "consulta" || listaEncerrada
+                ? `
+                    <p class="modo-consulta">
+                        Modo consulta — alterações bloqueadas.
+                    </p>
+                `
+                : `
+                    <div class="acoes-formulario">
 
-<div id="resumo-presencas"></div>
+                        <button
+                            type="button"
+                            id="botao-encerrar-presencas"
+                        >
+                            Encerrar Lista de Presenças
+                        </button>
+
+                    </div>
+                `
+        }
+
+        <div id="resumo-presencas"></div>
+
     `;
 
     container
         .querySelectorAll(".controle-presenca")
         .forEach(controle => {
+
             controle.addEventListener(
                 "change",
                 alterarPresencaEvento
             );
+
         });
+
+    const botaoEncerrar =
+        container.querySelector(
+            "#botao-encerrar-presencas"
+        );
+
+    if (botaoEncerrar) {
+
+        botaoEncerrar.addEventListener(
+            "click",
+            () => encerrarListaPresencas(evento.id)
+        );
+
+    }
 
     atualizarResumoEvento(registros);
 }
 
 
+async function encerrarListaPresencas(idEvento) {
+
+    const confirmar = confirm(
+        "Deseja realmente encerrar a lista de presenças?\n\n" +
+        "Após a confirmação, não será mais possível alterar os registros."
+    );
+
+    if (!confirmar) {
+        return;
+    }
+
+    const { error } =
+        await clienteSupabase
+            .from("eventos")
+            .update({
+                lista_presencas_encerrada: true
+            })
+            .eq("id", idEvento);
+
+    if (error) {
+
+        alert(
+            "Erro ao encerrar a lista: " +
+            error.message
+        );
+
+        return;
+    }
+
+    alert("Lista de presenças encerrada com sucesso!");
+
+    await carregarEventoAberto(
+        idEvento,
+        "consulta"
+    );
+
+}
+
 async function alterarPresencaEvento(evento) {
+
     const controle =
         evento.currentTarget;
 
@@ -373,6 +486,29 @@ async function alterarPresencaEvento(evento) {
         return;
     }
 
+    // Verifica se a lista foi encerrada
+    const eventoAtual =
+        await buscarEventoPorId(
+            presenca.eventoId
+        );
+
+    if (
+        !eventoAtual ||
+        eventoAtual.lista_presencas_encerrada === true
+    ) {
+
+        alert(
+            "Esta lista de presenças está encerrada."
+        );
+
+        await carregarEventoAberto(
+            presenca.eventoId,
+            "consulta"
+        );
+
+        return;
+    }
+
     presenca.presente =
         controle.checked;
 
@@ -384,24 +520,19 @@ async function alterarPresencaEvento(evento) {
         );
 
     if (status) {
+
         status.textContent =
             presenca.presente
                 ? "Presente"
                 : "Ausente";
+
     }
 
-    const eventoAtual =
-        await buscarEventoPorId(
-            presenca.eventoId
-        );
+    await carregarEventoAberto(
+        eventoAtual.id
+    );
 
-    if (eventoAtual) {
-        await carregarEventoAberto(
-            eventoAtual.id
-        );
-    }
 }
-
 
 function atualizarResumoEvento(registros) {
     const resumo =
@@ -570,10 +701,8 @@ async function carregarListaEventosPresencas() {
                         evento
                     );
 
-                   await carregarEventoAberto(
-    evento.id,
-    "consulta"
-);
+                    await carregarEventoAberto(evento.id);
+
                 }
             );
         });

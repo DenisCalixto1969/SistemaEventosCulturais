@@ -598,6 +598,7 @@ container
 }
 
 async function tratarAcaoEvento(evento) {
+    console.log("CLIQUE DETECTADO:", evento.currentTarget.dataset);
     const botao = evento.currentTarget;
 
     const acao = botao.dataset.acao;
@@ -613,10 +614,24 @@ async function tratarAcaoEvento(evento) {
         return;
     }
 
-    if (acao === "abrir") {
-    await abrirEventoParaPresencas(id);
-    return;
+   if (acao === "abrir") {
+
+    console.log("1 - Iniciando abertura do evento:", id);
+
+    try {
+
+        await abrirEventoParaPresencas(id);
+
+        console.log("2 - Abertura do evento concluída.");
+
+    } catch (erro) {
+
+        console.error("ERRO AO ABRIR EVENTO:", erro);
+
     }
+
+    return;
+}
 }
 
 async function buscarEventoPorId(id) {
