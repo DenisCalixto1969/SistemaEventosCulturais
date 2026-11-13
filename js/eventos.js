@@ -605,12 +605,12 @@ async function carregarEventos() {
                                 `}
 
                                 <button
-                                    type="button"
-                                    data-acao="abrir"
-                                    data-id="${evento.id}"
-                                >
-                                    Abrir
-                                </button>
+    type="button"
+    data-acao="abrir"
+    data-id="${evento.id}"
+>
+    ${encerrado ? "Abrir Consulta" : "Abrir"}
+</button>
 
                                 ${encerrado ? "" : `
                                     <button
