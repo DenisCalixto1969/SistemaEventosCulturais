@@ -412,34 +412,55 @@ async function salvarEvento(evento) {
 
 
     try {
-    if (eventoEmEdicaoId) {
-        const eventoAtualizado = {
-            id: eventoEmEdicaoId,
-            data: dados.data,
-            tipo: dados.tipo,
-            nome: dados.nome,
-            grau: dados.grau
-        };
+        if (eventoEmEdicaoId) {
+            // Confere novamente no banco antes de permitir a alteração.
+            const eventoExistente =
+                await buscarEventoPorId(eventoEmEdicaoId);
 
-        await atualizarEvento(eventoAtualizado);
+            if (!eventoExistente) {
+                alert("Evento não encontrado.");
+                fecharModalEvento();
+                await carregarEventos();
+                return;
+            }
 
-        eventoEmEdicaoId = null;
+            if (eventoExistente.evento_encerrado === true) {
+                alert(
+                    "Este evento está encerrado e não pode mais ser alterado."
+                );
 
-    } else {
-        const novoEvento = {
-            id: crypto.randomUUID(),
-            data: dados.data,
-            tipo: dados.tipo,
-            nome: dados.nome,
-            grau: dados.grau
-        };
+                fecharModalEvento();
+                await carregarEventos();
+                return;
+            }
 
-        await adicionarEvento(novoEvento);
-    }
+            const eventoAtualizado = {
+                id: eventoEmEdicaoId,
+                data: dados.data,
+                tipo: dados.tipo,
+                nome: dados.nome,
+                grau: dados.grau
+            };
 
-    fecharModalEvento();
+            await atualizarEvento(eventoAtualizado);
 
-    await carregarEventos();
+            eventoEmEdicaoId = null;
+
+        } else {
+            const novoEvento = {
+                id: crypto.randomUUID(),
+                data: dados.data,
+                tipo: dados.tipo,
+                nome: dados.nome,
+                grau: dados.grau
+            };
+
+            await adicionarEvento(novoEvento);
+        }
+
+        fecharModalEvento();
+
+        await carregarEventos();
 
 
     } catch (erro) {
@@ -447,8 +468,13 @@ async function salvarEvento(evento) {
             "Erro ao salvar evento:",
             erro
         );
+
+        alert(
+            `Não foi possível salvar o evento: ${erro.message}`
+        );
     }
 }
+
 
 async function adicionarEvento(evento) {
     const { error } =
@@ -462,6 +488,7 @@ async function adicionarEvento(evento) {
         );
     }
 }
+
 
 async function listarEventos() {
     const { data, error } =
@@ -477,6 +504,7 @@ async function listarEventos() {
 
     return data || [];
 }
+
 
 function formatarDataEvento(data) {
     if (!data) {
@@ -537,102 +565,130 @@ async function carregarEventos() {
                     <th>Data</th>
                     <th>Evento</th>
                     <th>Participação</th>
+                    <th>Situação</th>
                     <th>Ações</th>
                 </tr>
             </thead>
 
             <tbody>
-                ${eventos.map(evento => `
-                    <tr>
-                        <td>
-                            ${formatarDataEvento(evento.data)}
-                        </td>
+                ${eventos.map(evento => {
+                    const encerrado =
+                        evento.evento_encerrado === true;
 
-                        <td>
-                            ${obterNomeExibicaoEvento(evento)}
-                        </td>
+                    return `
+                        <tr>
+                            <td>
+                                ${formatarDataEvento(evento.data)}
+                            </td>
 
-                        <td>
-                            ${obterRegraExibicaoEvento(evento)}
-                        </td>
+                            <td>
+                                ${obterNomeExibicaoEvento(evento)}
+                            </td>
 
-                        <td>
-                            <button
-                                type="button"
-                                data-acao="editar"
-                                data-id="${evento.id}"
-                            >
-                                Editar
-                            </button>
+                            <td>
+                                ${obterRegraExibicaoEvento(evento)}
+                            </td>
 
-                            <button
-                                type="button"
-                                data-acao="abrir"
-                                data-id="${evento.id}"
-                            >
-                                Abrir
-                            </button>
+                            <td>
+                                ${encerrado ? "Encerrado" : "Em andamento"}
+                            </td>
 
-                            <button
-                                type="button"
-                                data-acao="excluir"
-                                data-id="${evento.id}"
-                            >
-                                Excluir
-                            </button>
-                        </td>
-                    </tr>
-                `).join("")}
+                            <td>
+                                ${encerrado ? "" : `
+                                    <button
+                                        type="button"
+                                        data-acao="editar"
+                                        data-id="${evento.id}"
+                                    >
+                                        Editar
+                                    </button>
+                                `}
+
+                                <button
+                                    type="button"
+                                    data-acao="abrir"
+                                    data-id="${evento.id}"
+                                >
+                                    Abrir
+                                </button>
+
+                                ${encerrado ? "" : `
+                                    <button
+                                        type="button"
+                                        data-acao="encerrar"
+                                        data-id="${evento.id}"
+                                    >
+                                        Encerrar
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        data-acao="excluir"
+                                        data-id="${evento.id}"
+                                    >
+                                        Excluir
+                                    </button>
+                                `}
+                            </td>
+                        </tr>
+                    `;
+                }).join("")}
             </tbody>
         </table>
     `;
-container
-    .querySelectorAll("button[data-acao]")
-    .forEach(botao => {
-        botao.addEventListener(
-            "click",
-            tratarAcaoEvento
-        );
-    });
 
+
+    container
+        .querySelectorAll("button[data-acao]")
+        .forEach(botao => {
+            botao.addEventListener(
+                "click",
+                tratarAcaoEvento
+            );
+        });
 }
 
+
 async function tratarAcaoEvento(evento) {
-    console.log("CLIQUE DETECTADO:", evento.currentTarget.dataset);
     const botao = evento.currentTarget;
 
     const acao = botao.dataset.acao;
     const id = botao.dataset.id;
 
-    if (acao === "editar") {
-        await editarEvento(id);
-        return;
-    }
-
-    if (acao === "excluir") {
-        await excluirEvento(id);
-        return;
-    }
-
-   if (acao === "abrir") {
-
-    console.log("1 - Iniciando abertura do evento:", id);
 
     try {
+        if (acao === "editar") {
+            await editarEvento(id);
+            return;
+        }
 
-        await abrirEventoParaPresencas(id);
+        if (acao === "excluir") {
+            await excluirEvento(id);
+            return;
+        }
 
-        console.log("2 - Abertura do evento concluída.");
+        if (acao === "encerrar") {
+            await encerrarEvento(id);
+            return;
+        }
+
+        if (acao === "abrir") {
+            await abrirEventoParaPresencas(id);
+            return;
+        }
 
     } catch (erro) {
+        console.error(
+            "Erro ao executar ação do evento:",
+            erro
+        );
 
-        console.error("ERRO AO ABRIR EVENTO:", erro);
-
+        alert(
+            `Não foi possível executar a ação: ${erro.message}`
+        );
     }
+}
 
-    return;
-}
-}
 
 async function buscarEventoPorId(id) {
     const { data, error } =
@@ -651,10 +707,19 @@ async function buscarEventoPorId(id) {
     return data || null;
 }
 
+
 async function editarEvento(id) {
     const evento = await buscarEventoPorId(id);
 
     if (!evento) {
+        alert("Evento não encontrado.");
+        return;
+    }
+
+    if (evento.evento_encerrado === true) {
+        alert(
+            "Este evento está encerrado e não pode mais ser alterado."
+        );
         return;
     }
 
@@ -695,7 +760,22 @@ async function editarEvento(id) {
     ).focus();
 }
 
+
 async function atualizarEvento(evento) {
+    // Segunda proteção: não atualizar um evento já encerrado.
+    const eventoExistente =
+        await buscarEventoPorId(evento.id);
+
+    if (!eventoExistente) {
+        throw new Error("Evento não encontrado.");
+    }
+
+    if (eventoExistente.evento_encerrado === true) {
+        throw new Error(
+            "Este evento está encerrado e não pode mais ser alterado."
+        );
+    }
+
     const { error } =
         await clienteSupabase
             .from("eventos")
@@ -705,7 +785,8 @@ async function atualizarEvento(evento) {
                 nome: evento.nome,
                 grau: evento.grau
             })
-            .eq("id", evento.id);
+            .eq("id", evento.id)
+            .eq("evento_encerrado", false);
 
     if (error) {
         throw new Error(
@@ -714,7 +795,75 @@ async function atualizarEvento(evento) {
     }
 }
 
+
+async function encerrarEvento(id) {
+    const evento = await buscarEventoPorId(id);
+
+    if (!evento) {
+        alert("Evento não encontrado.");
+        return;
+    }
+
+    if (evento.evento_encerrado === true) {
+        alert("Este evento já está encerrado.");
+        await carregarEventos();
+        return;
+    }
+
+    // A lista de presenças precisa estar encerrada primeiro.
+    if (evento.lista_presencas_encerrada !== true) {
+        alert(
+            "Não é possível encerrar o evento.\n\n" +
+            "Primeiro, encerre a lista de presenças deste evento."
+        );
+        return;
+    }
+
+    const confirmar = confirm(
+        "Deseja realmente encerrar este evento?\n\n" +
+        "Após a confirmação, não será mais possível editar ou excluir o evento."
+    );
+
+    if (!confirmar) {
+        return;
+    }
+
+    const { error } =
+        await clienteSupabase
+            .from("eventos")
+            .update({
+                evento_encerrado: true
+            })
+            .eq("id", id)
+            .eq("evento_encerrado", false);
+
+    if (error) {
+        throw new Error(
+            `Não foi possível encerrar o evento: ${error.message}`
+        );
+    }
+
+    alert("Evento encerrado com sucesso!");
+
+    await carregarEventos();
+}
+
+
 async function excluirEvento(id) {
+    const evento = await buscarEventoPorId(id);
+
+    if (!evento) {
+        alert("Evento não encontrado.");
+        return;
+    }
+
+    if (evento.evento_encerrado === true) {
+        alert(
+            "Este evento está encerrado e não pode ser excluído."
+        );
+        return;
+    }
+
     const confirmar = confirm(
         "Deseja realmente excluir este evento?"
     );
@@ -727,7 +876,8 @@ async function excluirEvento(id) {
         await clienteSupabase
             .from("eventos")
             .delete()
-            .eq("id", id);
+            .eq("id", id)
+            .eq("evento_encerrado", false);
 
     if (error) {
         throw new Error(
